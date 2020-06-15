@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Autofac.Core.Activators.Reflection;
+﻿using System.Web.Mvc;
+using testNetMq.Models;
 using testNetMq.Services;
 
 namespace testNetMq.Controllers
@@ -19,7 +15,7 @@ namespace testNetMq.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return Json(new { OK = "OK" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Send()
@@ -28,22 +24,5 @@ namespace testNetMq.Controllers
 
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
-    }
-
-    public class QueueDto
-    {
-        public QueueDto()
-        {
-        }
-
-        public QueueDto(int id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
-
-        public int Id { get; set; }
-
-        public string Name { get; set; }
     }
 }

@@ -17,10 +17,8 @@ namespace testNetMq
     {
         protected void Application_Start()
         {
-            // AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             var builder = new ContainerBuilder();
 
@@ -31,7 +29,16 @@ namespace testNetMq
 
             var mqConnection = ConfigurationManager.AppSettings["RabbitMQConnectionString"];
             builder.RegisterEasyNetQ(mqConnection);
-            builder.RegisterType<QueueSender>().As<IQueueSender>().SingleInstance();
+            builder.RegisterType<QueueSender>().As<IQueueSender>().InstancePerLifetimeScope();
+            builder.RegisterType<TestConsumer>().As<ITestConsumer>().InstancePerLifetimeScope();
+            
+            builder.RegisterType<QueueConsumer>().As<IQueueConsumer>()
+                   .InstancePerLifetimeScope()
+                   .OnActivated(args =>
+                   {
+                       args.Instance.Register();
+                   })
+                   .AutoActivate();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
