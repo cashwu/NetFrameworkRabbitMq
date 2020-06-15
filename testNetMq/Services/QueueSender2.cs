@@ -5,14 +5,13 @@ using Newtonsoft.Json;
 
 namespace testNetMq.Services
 {
-    public class QueueSender : IQueueSender
+    public class QueueSender2 : IQueueSender
     {
         private readonly IBus _bus;
-        private const string Queue = "cashQueue";
-        private const string SendExchange = "cashExchange";
-        private const string RouteKey = "cashRoute_";
+        private const string SendExchange = "cashExchangeFanout";
+        private const string RouteKey = "cashRouteFanout_";
 
-        public QueueSender(IBus bus)
+        public QueueSender2(IBus bus)
         {
             _bus = bus;
         }
@@ -20,14 +19,14 @@ namespace testNetMq.Services
         public void Send<TMessage>(string routingKey, TMessage message)
             where TMessage : new()
         {
-            var exchange = _bus.Advanced.ExchangeDeclare(SendExchange, ExchangeType.Direct);
-            routingKey = $"{RouteKey}{routingKey}";
+            var exchange = _bus.Advanced.ExchangeDeclare(SendExchange, ExchangeType.Fanout);
+            // routingKey = $"{RouteKey}{routingKey}_12323";
 
             var properties = new MessageProperties();
             var body = Serialize(message);
 
             // _bus.Advanced.Bind(exchange, new Queue(Queue, false), routingKey);
-            _bus.Advanced.Publish(exchange, routingKey, false, properties, body);
+            _bus.Advanced.Publish(exchange, string.Empty, false, properties, body);
         }
 
         private static byte[] Serialize<TMessage>(TMessage message)

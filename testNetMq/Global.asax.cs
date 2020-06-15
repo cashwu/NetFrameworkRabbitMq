@@ -29,7 +29,8 @@ namespace testNetMq
 
             var mqConnection = ConfigurationManager.AppSettings["RabbitMQConnectionString"];
             builder.RegisterEasyNetQ(mqConnection);
-            builder.RegisterType<QueueSender>().As<IQueueSender>().InstancePerLifetimeScope();
+            builder.RegisterType<QueueSender>().As<IQueueSender>().InstancePerLifetimeScope().PreserveExistingDefaults();
+            builder.RegisterType<QueueSender2>().As<IQueueSender>().InstancePerLifetimeScope().PreserveExistingDefaults();
             builder.RegisterType<TestConsumer>().As<ITestConsumer>().InstancePerLifetimeScope();
             
             builder.RegisterType<QueueConsumer>().As<IQueueConsumer>()

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using testNetMq.Models;
 using testNetMq.Services;
 
@@ -6,9 +7,9 @@ namespace testNetMq.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IQueueSender _queueSender;
+        private readonly IEnumerable<IQueueSender> _queueSender;
 
-        public HomeController(IQueueSender queueSender)
+        public HomeController(IEnumerable<IQueueSender> queueSender)
         {
             _queueSender = queueSender;
         }
@@ -20,7 +21,10 @@ namespace testNetMq.Controllers
 
         public ActionResult Send()
         {
-            _queueSender.Send("test", new QueueDto(1, "cash"));
+            foreach (var queueSender in _queueSender)
+            {
+                queueSender.Send("test", new QueueDto(1, "cash"));
+            }
 
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }

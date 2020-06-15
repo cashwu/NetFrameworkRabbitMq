@@ -176,6 +176,7 @@
     <Compile Include="Services\ITestConsumer.cs" />
     <Compile Include="Services\QueueConsumer.cs" />
     <Compile Include="Services\QueueSender.cs" />
+    <Compile Include="Services\QueueSender2.cs" />
     <Compile Include="Services\TestConsumer.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,6 @@ namespace testNetMq.Services
 {
     public interface ITestConsumer
     {
-        void Handler(QueueDto dto);
+        void Handler(string key, QueueDto dto);
     }
 }
